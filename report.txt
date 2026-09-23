@@ -1,0 +1,648 @@
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-20
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-20: {'zones': 3, 'vehicles': 47, 'pickup_requests': 302, 'dropoff_requests': 668, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-20  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 302, 'dropoff_requests': 668, 'fixed_stops': 186}
+Coordinates: 302/302 pickup requests valid, 668/668 dropoff requests valid
+[00:00:00] 14 riders -> 14 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=18.5 km cross-zone=0
+[01:00:00] 13 riders -> 13 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=29.7 km cross-zone=1
+[02:00:00] 4 riders -> 4 car(s) 1, 1, 1, 1 | pool=anyone deadhead=9.1 km cross-zone=0
+[03:00:00] 3 riders -> 2 car(s) 1, 2 | pool=anyone deadhead=3.0 km cross-zone=0
+[04:00:00] 1 riders -> 1 car(s) 1 | pool=anyone deadhead=17.2 km cross-zone=0
+[05:00:00] 5 riders -> 1 car(s) 5 | pool=rostered(2) deadhead=5.2 km cross-zone=0
+[06:00:00] 7 riders -> 4 car(s) 2, 1, 2, 2 | pool=rostered(6) deadhead=26.4 km cross-zone=1
+routing: solved 2026-09-20 -> {'routes': 192, 'pickup_routes': 73, 'dropoff_routes': 119, 'stops': 729, 'passengers': 875, 'unassigned': 95}
+
+=== 2026-09-20  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 192, 'pickup_routes': 73, 'dropoff_routes': 119, 'stops': 729, 'passengers': 875, 'unassigned': 95}
+unassigned by (type, shift_time, reason):
+    dropoff  00:00:00  dropped_for_120min_cap     2
+    dropoff  07:00:00  dropped_for_120min_cap     15
+    dropoff  07:00:00  no_vehicle_available       76
+    pickup   01:00:00  vehicle_not_free_in_time   2
+
+=== Summary ===
+Routes created: 192 (73 pickup, 119 drop-off)
+Stops served: 729
+Passengers assigned: 875
+Unassigned: 95
+Accounting: 970 requests -> 875 routed, 95 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  no_vehicle_available         76
+  dropped_for_120min_cap       17
+  vehicle_not_free_in_time     2
+
+=== Duty blocks (one line per car: its trips in order) ===
+    6x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    5x  P22:00 -> D23:00 -> D06:00
+    4x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> D06:00
+    2x  D22:00 -> P01:00 -> P06:00 -> D06:00
+    2x  P23:00 -> D23:00 -> D06:00
+    2x  P23:00 -> D23:00 -> D07:00
+    1x  P22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D00:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P01:00 -> P06:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D00:00 -> D07:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P04:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P00:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> P05:00 -> D06:00
+    1x  D22:00 -> P01:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P01:00 -> P02:00 -> D07:00
+    1x  D22:00 -> D00:00 -> P03:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P06:00 -> D06:00
+    1x  D22:00 -> D07:00
+    1x  D22:00 -> D23:00 -> D07:00
+    1x  D22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  D22:00 -> P00:00 -> P01:00 -> P02:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P01:00 -> D07:00
+    1x  P23:00 -> P00:00 -> D07:00
+
+Fleet driving minutes: 18372
+Fleet idle minutes between trips: 14254   (drive:idle = 1.29:1)
+Trip-type transitions: {('pickup', 'dropoff'): 64, ('dropoff', 'pickup'): 28, ('dropoff', 'dropoff'): 44, ('pickup', 'pickup'): 9}
+  pickup   ride  mean= 49.5  p50= 45.2  p90= 87.3  MAX=118.3 min  | total 14863 pax-min
+  pickup   wait  mean= 56.4  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 33.5  p50= 28.7  p90= 79.3  MAX=112.8 min  | total 19267 pax-min
+  dropoff  wait  mean= 54.5  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  2752 min (driven)
+Drop-off return legs to the office:   5586 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-21
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-21: {'zones': 3, 'vehicles': 47, 'pickup_requests': 290, 'dropoff_requests': 668, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-21  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 290, 'dropoff_requests': 668, 'fixed_stops': 186}
+Coordinates: 290/290 pickup requests valid, 668/668 dropoff requests valid
+[00:00:00] 18 riders -> 18 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=44.3 km cross-zone=2
+[01:00:00] 11 riders -> 11 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=29.9 km cross-zone=0
+[02:00:00] 5 riders -> 5 car(s) 1, 1, 1, 1, 1 | pool=anyone deadhead=19.1 km cross-zone=1
+[03:00:00] 2 riders -> 2 car(s) 1, 1 | pool=anyone deadhead=2.4 km cross-zone=0
+[04:00:00] 1 riders -> 1 car(s) 1 | pool=anyone deadhead=18.5 km cross-zone=1
+[05:00:00] 4 riders -> 1 car(s) 4 | pool=rostered(2) deadhead=6.8 km cross-zone=0
+[06:00:00] 6 riders -> 3 car(s) 3, 2, 1 | pool=rostered(6) deadhead=11.1 km cross-zone=1
+routing: solved 2026-09-21 -> {'routes': 193, 'pickup_routes': 67, 'dropoff_routes': 126, 'stops': 716, 'passengers': 863, 'unassigned': 95}
+
+=== 2026-09-21  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 193, 'pickup_routes': 67, 'dropoff_routes': 126, 'stops': 716, 'passengers': 863, 'unassigned': 95}
+unassigned by (type, shift_time, reason):
+    dropoff  00:00:00  dropped_for_120min_cap     2
+    dropoff  06:00:00  dropped_for_120min_cap     8
+    dropoff  07:00:00  dropped_for_120min_cap     28
+    dropoff  07:00:00  no_vehicle_available       55
+    pickup   00:00:00  vehicle_not_free_in_time   1
+    pickup   04:00:00  vehicle_not_free_in_time   1
+
+=== Summary ===
+Routes created: 193 (67 pickup, 126 drop-off)
+Stops served: 716
+Passengers assigned: 863
+Unassigned: 95
+Accounting: 958 requests -> 863 routed, 95 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  no_vehicle_available         55
+  dropped_for_120min_cap       38
+  vehicle_not_free_in_time     2
+
+=== Duty blocks (one line per car: its trips in order) ===
+    5x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    3x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  D22:00 -> P00:00 -> D00:00 -> D07:00
+    3x  P23:00 -> D23:00 -> D07:00
+    2x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> D06:00
+    2x  D22:00 -> D23:00 -> D07:00
+    1x  P22:00 -> D23:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> P03:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P06:00 -> D06:00
+    1x  D22:00 -> D00:00 -> D07:00
+    1x  D22:00 -> P01:00 -> P06:00 -> D06:00
+    1x  D22:00 -> P01:00 -> D06:00
+    1x  D22:00 -> P03:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  D22:00 -> D00:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P01:00 -> P02:00 -> D06:00
+    1x  D22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P06:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P23:00 -> D23:00 -> D06:00
+    1x  P23:00 -> P00:00 -> D06:00
+
+Fleet driving minutes: 19390
+Fleet idle minutes between trips: 12948   (drive:idle = 1.50:1)
+Trip-type transitions: {('pickup', 'dropoff'): 59, ('dropoff', 'dropoff'): 52, ('dropoff', 'pickup'): 27, ('pickup', 'pickup'): 8}
+  pickup   ride  mean= 46.4  p50= 42.6  p90= 81.3  MAX=118.1 min  | total 13369 pax-min
+  pickup   wait  mean= 55.6  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 33.0  p50= 26.5  p90= 79.6  MAX=114.3 min  | total 19002 pax-min
+  dropoff  wait  mean= 56.6  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3838 min (driven)
+Drop-off return legs to the office:   6248 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-22
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-22: {'zones': 3, 'vehicles': 47, 'pickup_requests': 301, 'dropoff_requests': 683, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-22  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 301, 'dropoff_requests': 683, 'fixed_stops': 186}
+Coordinates: 301/301 pickup requests valid, 683/683 dropoff requests valid
+[00:00:00] 12 riders -> 7 car(s) 2, 1, 2, 3, 2, 1, 1 | pool=anyone deadhead=12.5 km cross-zone=0
+[01:00:00] 11 riders -> 11 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=21.1 km cross-zone=0
+[02:00:00] 4 riders -> 4 car(s) 1, 1, 1, 1 | pool=anyone deadhead=7.7 km cross-zone=0
+[03:00:00] 4 riders -> 3 car(s) 2, 1, 1 | pool=anyone deadhead=5.4 km cross-zone=0
+[05:00:00] 6 riders -> 2 car(s) 3, 3 | pool=rostered(2) deadhead=9.0 km cross-zone=1
+[06:00:00] 7 riders -> 7 car(s) 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=15.5 km cross-zone=0
+routing: solved 2026-09-22 -> {'routes': 189, 'pickup_routes': 67, 'dropoff_routes': 122, 'stops': 721, 'passengers': 867, 'unassigned': 117}
+
+=== 2026-09-22  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 189, 'pickup_routes': 67, 'dropoff_routes': 122, 'stops': 721, 'passengers': 867, 'unassigned': 117}
+unassigned by (type, shift_time, reason):
+    dropoff  06:00:00  dropped_for_120min_cap     5
+    dropoff  07:00:00  dropped_for_120min_cap     24
+    dropoff  07:00:00  no_vehicle_available       64
+    dropoff  23:00:00  dropped_for_120min_cap     1
+    pickup   06:00:00  dropped_for_120min_cap     1
+    pickup   22:00:00  dropped_for_120min_cap     1
+    pickup   23:00:00  dropped_for_120min_cap     1
+    pickup   23:00:00  vehicle_not_free_in_time   20
+
+=== Summary ===
+Routes created: 189 (67 pickup, 122 drop-off)
+Stops served: 721
+Passengers assigned: 867
+Unassigned: 117
+Accounting: 984 requests -> 867 routed, 117 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  no_vehicle_available         64
+  dropped_for_120min_cap       33
+  vehicle_not_free_in_time     20
+
+=== Duty blocks (one line per car: its trips in order) ===
+    9x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> P06:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> P03:00 -> D06:00
+    2x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D06:00
+    2x  D22:00 -> D23:00 -> P06:00 -> D06:00
+    2x  D22:00 -> P00:00 -> D00:00 -> D06:00
+    2x  D22:00 -> D00:00 -> D07:00
+    2x  P23:00 -> D23:00 -> D07:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D23:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D00:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> D06:00
+    1x  D22:00 -> P01:00 -> P05:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> P03:00 -> D06:00
+    1x  D22:00 -> D23:00 -> D07:00
+    1x  D22:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D07:00
+    1x  D22:00 -> P01:00 -> D07:00
+    1x  P23:00 -> D23:00 -> P02:00 -> D06:00
+
+Fleet driving minutes: 19245
+Fleet idle minutes between trips: 13336   (drive:idle = 1.44:1)
+Trip-type transitions: {('pickup', 'dropoff'): 63, ('dropoff', 'dropoff'): 44, ('dropoff', 'pickup'): 31, ('pickup', 'pickup'): 4}
+  pickup   ride  mean= 52.2  p50= 47.1  p90= 95.2  MAX=118.5 min  | total 14498 pax-min
+  pickup   wait  mean= 47.0  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 35.3  p50= 30.4  p90= 82.2  MAX=111.6 min  | total 20815 pax-min
+  dropoff  wait  mean= 60.5  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3335 min (driven)
+Drop-off return legs to the office:   6334 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-22
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-22: {'zones': 3, 'vehicles': 47, 'pickup_requests': 301, 'dropoff_requests': 683, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-22  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 301, 'dropoff_requests': 683, 'fixed_stops': 186}
+Coordinates: 301/301 pickup requests valid, 683/683 dropoff requests valid
+[00:00:00] 12 riders -> 7 car(s) 2, 1, 2, 3, 2, 1, 1 | pool=anyone deadhead=12.5 km cross-zone=0
+[01:00:00] 11 riders -> 11 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=23.2 km cross-zone=0
+[02:00:00] 4 riders -> 4 car(s) 1, 1, 1, 1 | pool=anyone deadhead=7.7 km cross-zone=0
+[03:00:00] 4 riders -> 4 car(s) 1, 1, 1, 1 | pool=anyone deadhead=9.2 km cross-zone=0
+[05:00:00] 6 riders -> 2 car(s) 3, 3 | pool=rostered(2) deadhead=9.0 km cross-zone=1
+[06:00:00] 7 riders -> 7 car(s) 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=16.4 km cross-zone=0
+routing: solved 2026-09-22 -> {'routes': 190, 'pickup_routes': 68, 'dropoff_routes': 122, 'stops': 715, 'passengers': 867, 'unassigned': 117}
+
+=== 2026-09-22  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 190, 'pickup_routes': 68, 'dropoff_routes': 122, 'stops': 715, 'passengers': 867, 'unassigned': 117}
+unassigned by (type, shift_time, reason):
+    dropoff  06:00:00  dropped_for_120min_cap     5
+    dropoff  07:00:00  dropped_for_120min_cap     24
+    dropoff  07:00:00  no_vehicle_available       64
+    dropoff  23:00:00  dropped_for_120min_cap     1
+    pickup   06:00:00  dropped_for_120min_cap     1
+    pickup   22:00:00  dropped_for_120min_cap     1
+    pickup   23:00:00  dropped_for_120min_cap     1
+    pickup   23:00:00  vehicle_not_free_in_time   20
+
+=== Summary ===
+Routes created: 190 (68 pickup, 122 drop-off)
+Stops served: 715
+Passengers assigned: 867
+Unassigned: 117
+Accounting: 984 requests -> 867 routed, 117 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  no_vehicle_available         64
+  dropped_for_120min_cap       33
+  vehicle_not_free_in_time     20
+
+=== Duty blocks (one line per car: its trips in order) ===
+    9x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    3x  D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D06:00
+    2x  D22:00 -> D23:00 -> P06:00 -> D06:00
+    2x  D22:00 -> P00:00 -> D00:00 -> D06:00
+    2x  P23:00 -> D23:00 -> D07:00
+    1x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> P06:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P02:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D23:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> P03:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D00:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> D06:00
+    1x  D22:00 -> P01:00 -> P05:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D07:00
+    1x  D22:00 -> D23:00 -> D07:00
+    1x  D22:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D07:00
+    1x  D22:00 -> P01:00 -> D07:00
+    1x  D22:00 -> D00:00 -> D07:00
+    1x  D22:00 -> D00:00 -> P03:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P02:00 -> D06:00
+
+Fleet driving minutes: 19234
+Fleet idle minutes between trips: 13420   (drive:idle = 1.43:1)
+Trip-type transitions: {('pickup', 'dropoff'): 62, ('dropoff', 'dropoff'): 45, ('dropoff', 'pickup'): 30, ('pickup', 'pickup'): 6}
+  pickup   ride  mean= 52.2  p50= 47.1  p90= 95.2  MAX=118.5 min  | total 14507 pax-min
+  pickup   wait  mean= 47.0  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 35.2  p50= 30.2  p90= 81.8  MAX=114.2 min  | total 20721 pax-min
+  dropoff  wait  mean= 60.2  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3316 min (driven)
+Drop-off return legs to the office:   6267 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-23
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-23: {'zones': 3, 'vehicles': 47, 'pickup_requests': 288, 'dropoff_requests': 653, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-23  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 288, 'dropoff_requests': 653, 'fixed_stops': 186}
+Coordinates: 288/288 pickup requests valid, 653/653 dropoff requests valid
+[00:00:00] 14 riders -> 14 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=22.0 km cross-zone=0
+[01:00:00] 5 riders -> 4 car(s) 2, 1, 1, 1 | pool=anyone deadhead=10.2 km cross-zone=0
+[02:00:00] 5 riders -> 3 car(s) 2, 1, 2 | pool=anyone deadhead=6.5 km cross-zone=0
+[03:00:00] 3 riders -> 2 car(s) 1, 2 | pool=anyone deadhead=2.0 km cross-zone=0
+[04:00:00] 1 riders -> 1 car(s) 1 | pool=anyone deadhead=17.2 km cross-zone=0
+[05:00:00] 3 riders -> 1 car(s) 3 | pool=rostered(2) deadhead=3.1 km cross-zone=0
+[06:00:00] 6 riders -> 3 car(s) 3, 2, 1 | pool=rostered(6) deadhead=14.9 km cross-zone=1
+routing: solved 2026-09-23 -> {'routes': 185, 'pickup_routes': 63, 'dropoff_routes': 122, 'stops': 756, 'passengers': 898, 'unassigned': 43}
+
+=== 2026-09-23  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 185, 'pickup_routes': 63, 'dropoff_routes': 122, 'stops': 756, 'passengers': 898, 'unassigned': 43}
+unassigned by (type, shift_time, reason):
+    dropoff  00:00:00  dropped_for_120min_cap     1
+    dropoff  07:00:00  dropped_for_120min_cap     19
+    dropoff  07:00:00  no_vehicle_available       6
+    pickup   23:00:00  dropped_for_120min_cap     2
+    pickup   23:00:00  vehicle_not_free_in_time   15
+
+=== Summary ===
+Routes created: 185 (63 pickup, 122 drop-off)
+Stops served: 756
+Passengers assigned: 898
+Unassigned: 43
+Accounting: 941 requests -> 898 routed, 43 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  dropped_for_120min_cap       22
+  vehicle_not_free_in_time     15
+  no_vehicle_available         6
+
+=== Duty blocks (one line per car: its trips in order) ===
+    8x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    6x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  P23:00 -> D23:00 -> D07:00
+    2x  P22:00 -> D23:00 -> D06:00
+    2x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  D22:00 -> P06:00 -> D06:00
+    2x  D22:00 -> P23:00 -> D23:00 -> D07:00
+    2x  D22:00 -> D23:00 -> D06:00
+    2x  D22:00 -> D23:00 -> D07:00
+    1x  P22:00 -> D22:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P04:00 -> D06:00
+    1x  P22:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P00:00 -> P01:00 -> D06:00
+    1x  D22:00 -> P01:00 -> D07:00
+    1x  D22:00 -> D07:00
+    1x  D22:00 -> D23:00 -> P03:00 -> D07:00
+    1x  D22:00 -> P00:00 -> D07:00
+    1x  D22:00 -> P00:00 -> D00:00 -> P03:00 -> D07:00
+    1x  D22:00 -> D23:00 -> D00:00 -> D07:00
+    1x  D22:00 -> P02:00 -> D07:00
+    1x  P23:00 -> D23:00 -> P05:00 -> D07:00
+
+Fleet driving minutes: 17398
+Fleet idle minutes between trips: 14800   (drive:idle = 1.18:1)
+Trip-type transitions: {('pickup', 'dropoff'): 59, ('dropoff', 'dropoff'): 48, ('dropoff', 'pickup'): 27, ('pickup', 'pickup'): 4}
+  pickup   ride  mean= 49.3  p50= 45.4  p90= 93.0  MAX=118.3 min  | total 13374 pax-min
+  pickup   wait  mean= 43.4  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 34.7  p50= 28.2  p90= 81.0  MAX=110.3 min  | total 21776 pax-min
+  dropoff  wait  mean= 54.3  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3186 min (driven)
+Drop-off return legs to the office:   5535 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-24
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-24: {'zones': 3, 'vehicles': 47, 'pickup_requests': 297, 'dropoff_requests': 663, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-24  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 297, 'dropoff_requests': 663, 'fixed_stops': 186}
+Coordinates: 297/297 pickup requests valid, 663/663 dropoff requests valid
+[00:00:00] 17 riders -> 17 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=28.8 km cross-zone=1
+[01:00:00] 13 riders -> 13 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=24.1 km cross-zone=0
+[02:00:00] 4 riders -> 2 car(s) 3, 1 | pool=anyone deadhead=1.2 km cross-zone=0
+[03:00:00] 3 riders -> 2 car(s) 1, 2 | pool=anyone deadhead=4.5 km cross-zone=0
+[04:00:00] 1 riders -> 1 car(s) 1 | pool=anyone deadhead=14.1 km cross-zone=0
+[05:00:00] 5 riders -> 1 car(s) 5 | pool=rostered(2) deadhead=3.5 km cross-zone=0
+[06:00:00] 6 riders -> 3 car(s) 1, 3, 2 | pool=rostered(6) deadhead=21.0 km cross-zone=1
+routing: solved 2026-09-24 -> {'routes': 200, 'pickup_routes': 70, 'dropoff_routes': 130, 'stops': 740, 'passengers': 896, 'unassigned': 64}
+
+=== 2026-09-24  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 200, 'pickup_routes': 70, 'dropoff_routes': 130, 'stops': 740, 'passengers': 896, 'unassigned': 64}
+unassigned by (type, shift_time, reason):
+    dropoff  06:00:00  dropped_for_120min_cap     1
+    dropoff  07:00:00  dropped_for_120min_cap     32
+    dropoff  07:00:00  no_vehicle_available       25
+    pickup   23:00:00  vehicle_not_free_in_time   6
+
+=== Summary ===
+Routes created: 200 (70 pickup, 130 drop-off)
+Stops served: 740
+Passengers assigned: 896
+Unassigned: 64
+Accounting: 960 requests -> 896 routed, 64 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  dropped_for_120min_cap       33
+  no_vehicle_available         25
+  vehicle_not_free_in_time     6
+
+=== Duty blocks (one line per car: its trips in order) ===
+    4x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> D06:00
+    3x  D22:00 -> P01:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> P02:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    2x  D22:00 -> D23:00 -> P01:00 -> D07:00
+    2x  D22:00 -> P00:00 -> P01:00 -> D07:00
+    2x  D22:00 -> D23:00 -> D07:00
+    2x  P23:00 -> P00:00 -> D07:00
+    1x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P04:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P00:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> P00:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P06:00 -> D06:00
+    1x  D22:00 -> P06:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> P05:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D07:00
+    1x  D22:00 -> D00:00 -> D07:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D06:00
+    1x  D22:00 -> D23:00 -> D06:00
+    1x  D22:00 -> D23:00 -> D00:00 -> D06:00
+    1x  D22:00 -> P23:00 -> D23:00 -> D07:00
+    1x  D22:00 -> P23:00 -> D23:00 -> P01:00 -> P03:00 -> D07:00
+    1x  P23:00 -> D23:00 -> D07:00
+    1x  P23:00 -> D23:00 -> P01:00 -> P06:00 -> D06:00
+
+Fleet driving minutes: 17279
+Fleet idle minutes between trips: 14735   (drive:idle = 1.17:1)
+Trip-type transitions: {('pickup', 'pickup'): 11, ('pickup', 'dropoff'): 59, ('dropoff', 'dropoff'): 53, ('dropoff', 'pickup'): 30}
+  pickup   ride  mean= 42.6  p50= 37.7  p90= 76.8  MAX=118.4 min  | total 12399 pax-min
+  pickup   wait  mean= 42.8  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 33.3  p50= 24.9  p90= 82.9  MAX=113.3 min  | total 20160 pax-min
+  dropoff  wait  mean= 53.9  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3243 min (driven)
+Drop-off return legs to the office:   5441 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-25
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-25: {'zones': 3, 'vehicles': 47, 'pickup_requests': 295, 'dropoff_requests': 693, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-25  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 295, 'dropoff_requests': 693, 'fixed_stops': 186}
+Coordinates: 295/295 pickup requests valid, 693/693 dropoff requests valid
+[00:00:00] 13 riders -> 13 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=11.6 km cross-zone=0
+[01:00:00] 9 riders -> 9 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=20.2 km cross-zone=0
+[02:00:00] 4 riders -> 3 car(s) 2, 1, 1 | pool=anyone deadhead=7.4 km cross-zone=0
+[03:00:00] 2 riders -> 2 car(s) 1, 1 | pool=anyone deadhead=6.2 km cross-zone=0
+[05:00:00] 5 riders -> 2 car(s) 3, 2 | pool=rostered(2) deadhead=12.2 km cross-zone=1
+[06:00:00] 7 riders -> 3 car(s) 3, 3, 1 | pool=rostered(6) deadhead=15.1 km cross-zone=1
+routing: solved 2026-09-25 -> {'routes': 200, 'pickup_routes': 62, 'dropoff_routes': 138, 'stops': 816, 'passengers': 957, 'unassigned': 31}
+
+=== 2026-09-25  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 200, 'pickup_routes': 62, 'dropoff_routes': 138, 'stops': 816, 'passengers': 957, 'unassigned': 31}
+unassigned by (type, shift_time, reason):
+    dropoff  00:00:00  dropped_for_120min_cap     1
+    dropoff  07:00:00  dropped_for_120min_cap     13
+    dropoff  07:00:00  no_vehicle_available       1
+    pickup   01:00:00  vehicle_not_free_in_time   2
+    pickup   23:00:00  vehicle_not_free_in_time   14
+
+=== Summary ===
+Routes created: 200 (62 pickup, 138 drop-off)
+Stops served: 816
+Passengers assigned: 957
+Unassigned: 31
+Accounting: 988 requests -> 957 routed, 31 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  vehicle_not_free_in_time     16
+  dropped_for_120min_cap       14
+  no_vehicle_available         1
+
+=== Duty blocks (one line per car: its trips in order) ===
+    5x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    3x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> D06:00
+    3x  D22:00 -> P23:00 -> D23:00 -> D07:00
+    3x  D22:00 -> D23:00 -> D07:00
+    2x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    2x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00 -> D07:00
+    2x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    2x  D22:00 -> D00:00 -> D07:00
+    1x  P22:00 -> D22:00 -> D00:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P23:00 -> D23:00 -> D00:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> D06:00 -> D07:00
+    1x  P22:00 -> D22:00 -> P06:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> D06:00 -> D07:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D07:00
+    1x  D22:00 -> D23:00 -> D00:00 -> D06:00
+    1x  D22:00 -> D23:00 -> D06:00
+    1x  D22:00 -> P02:00 -> P06:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P02:00 -> D07:00
+    1x  D22:00 -> D23:00 -> P01:00 -> P05:00 -> D07:00
+    1x  D22:00 -> D23:00 -> P03:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  D22:00 -> D00:00 -> P06:00 -> D06:00
+    1x  P23:00 -> D00:00 -> D07:00
+    1x  P23:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P23:00 -> D23:00 -> D07:00
+    1x  P23:00 -> P00:00 -> P01:00 -> D07:00
+
+Fleet driving minutes: 17383
+Fleet idle minutes between trips: 14878   (drive:idle = 1.17:1)
+Trip-type transitions: {('pickup', 'dropoff'): 53, ('dropoff', 'dropoff'): 68, ('dropoff', 'pickup'): 23, ('pickup', 'pickup'): 9}
+  pickup   ride  mean= 42.2  p50= 38.2  p90= 77.7  MAX=115.6 min  | total 11762 pax-min
+  pickup   wait  mean= 48.3  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 33.1  p50= 25.6  p90= 81.8  MAX=115.4 min  | total 22443 pax-min
+  dropoff  wait  mean= 50.5  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3407 min (driven)
+Drop-off return legs to the office:   5209 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> python run_ml_solver_db.py --date 2026-09-26
+routing: using OSRM at http://localhost:5000
+routing: using OSRM foot at http://localhost:5001
+routing input for 2026-09-26: {'zones': 3, 'vehicles': 47, 'pickup_requests': 282, 'dropoff_requests': 652, 'fixed_stops': 186}
+[source] live DB, service_date=2026-09-26  stats={'zones': 3, 'vehicles': 47, 'pickup_requests': 282, 'dropoff_requests': 652, 'fixed_stops': 186}
+Coordinates: 282/282 pickup requests valid, 652/652 dropoff requests valid
+[00:00:00] 12 riders -> 12 car(s) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=12.2 km cross-zone=0
+[01:00:00] 8 riders -> 8 car(s) 1, 1, 1, 1, 1, 1, 1, 1 | pool=anyone deadhead=15.3 km cross-zone=0
+[02:00:00] 4 riders -> 4 car(s) 1, 1, 1, 1 | pool=anyone deadhead=11.9 km cross-zone=0
+[03:00:00] 3 riders -> 2 car(s) 1, 2 | pool=anyone deadhead=2.5 km cross-zone=0
+[04:00:00] 1 riders -> 1 car(s) 1 | pool=anyone deadhead=17.9 km cross-zone=0
+[05:00:00] 7 riders -> 2 car(s) 3, 4 | pool=rostered(2) deadhead=11.7 km cross-zone=1
+[06:00:00] 6 riders -> 6 car(s) 1, 1, 1, 1, 1, 1 | pool=rostered(6) deadhead=53.2 km cross-zone=2
+routing: solved 2026-09-26 -> {'routes': 189, 'pickup_routes': 64, 'dropoff_routes': 125, 'stops': 694, 'passengers': 850, 'unassigned': 84}
+
+=== 2026-09-26  engine=osrm  use_ml=True ===
+engine: osrm
+counts: {'routes': 189, 'pickup_routes': 64, 'dropoff_routes': 125, 'stops': 694, 'passengers': 850, 'unassigned': 84}
+unassigned by (type, shift_time, reason):
+    dropoff  00:00:00  dropped_for_120min_cap     1
+    dropoff  06:00:00  dropped_for_120min_cap     11
+    dropoff  07:00:00  dropped_for_120min_cap     23
+    dropoff  07:00:00  no_vehicle_available       46
+    pickup   01:00:00  vehicle_not_free_in_time   1
+    pickup   04:00:00  dropped_for_120min_cap     1
+    pickup   06:00:00  dropped_for_120min_cap     1
+
+=== Summary ===
+Routes created: 189 (64 pickup, 125 drop-off)
+Stops served: 694
+Passengers assigned: 850
+Unassigned: 84
+Accounting: 934 requests -> 850 routed, 84 reported, 0 unaccounted for
+Fleet state: 0 vehicle(s) double-booked on overlapping trips
+
+Unassigned by reason:
+  no_vehicle_available         46
+  dropped_for_120min_cap       37
+  vehicle_not_free_in_time     1
+
+=== Duty blocks (one line per car: its trips in order) ===
+    5x  P22:00 -> D22:00 -> P00:00 -> D00:00 -> D06:00
+    5x  P22:00 -> D22:00 -> D00:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D23:00 -> D06:00
+    3x  P22:00 -> D22:00 -> D23:00 -> D00:00 -> D06:00
+    2x  P22:00 -> P23:00 -> D23:00 -> D06:00
+    2x  D22:00 -> D23:00 -> D07:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> P03:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P01:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P22:00 -> D22:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P22:00 -> D22:00 -> P00:00 -> D06:00
+    1x  P22:00 -> P23:00 -> D23:00 -> P06:00 -> D06:00
+    1x  P22:00 -> D23:00 -> D06:00
+    1x  D22:00 -> P00:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D07:00
+    1x  D22:00 -> P01:00 -> P05:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P02:00 -> P06:00 -> D06:00
+    1x  D22:00 -> P00:00 -> D00:00 -> D07:00
+    1x  D22:00 -> P06:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P03:00 -> D06:00
+    1x  D22:00 -> D00:00 -> D07:00
+    1x  D22:00 -> D06:00
+    1x  D22:00 -> D23:00 -> P06:00 -> D06:00
+    1x  D22:00 -> D23:00 -> D00:00 -> P06:00 -> D06:00
+    1x  D22:00 -> P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  D22:00 -> P23:00 -> D23:00 -> D07:00
+    1x  P23:00 -> D00:00 -> D07:00
+    1x  P23:00 -> D23:00 -> D07:00
+    1x  P23:00 -> D23:00 -> P02:00 -> D06:00
+    1x  P23:00 -> D23:00 -> P01:00 -> D06:00
+    1x  P23:00 -> D23:00 -> D06:00
+    1x  P23:00 -> D06:00
+
+Fleet driving minutes: 18435
+Fleet idle minutes between trips: 13429   (drive:idle = 1.37:1)
+Trip-type transitions: {('pickup', 'dropoff'): 56, ('dropoff', 'dropoff'): 54, ('dropoff', 'pickup'): 24, ('pickup', 'pickup'): 8}
+  pickup   ride  mean= 43.8  p50= 39.6  p90= 74.7  MAX=118.0 min  | total 12231 pax-min
+  pickup   wait  mean= 47.4  (wait + ride = the route's duration, so this is the same trade)
+  dropoff  ride  mean= 31.9  p50= 24.8  p90= 78.2  MAX=114.7 min  | total 18197 pax-min
+  dropoff  wait  mean= 55.1  (wait + ride = the route's duration, so this is the same trade)
+Drop-off deadheads IN to the office:  3922 min (driven)
+Drop-off return legs to the office:   6059 min (NOT driven unless the car is reused)
+Drop-off tours still finishing at the office: 0
+Cars whose night ends at a rider's stop before 06:00: 0
+PS D:\Academic\4-1\Capstone\data> 
