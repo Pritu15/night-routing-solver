@@ -42,19 +42,16 @@ you pass `--dump-dir`/`--sql-out`.
 
 ## Running with the ML travel-time model
 
-The XGBoost duration-correction model is bundled at `ml_model/inference_bundle.joblib`.
-Point the solver at it and drop `--no-ml`:
+The XGBoost duration-correction model is bundled at `ml_model/inference_bundle.joblib`
+and is picked up automatically — no setup needed. ML is on by default (`--no-ml`
+turns it off), so this alone is enough:
 
 ```bash
-# bash / zsh
-export ROUTING_ML_MODEL_PATH="$(pwd)/ml_model/inference_bundle.joblib"
-# PowerShell
-$env:ROUTING_ML_MODEL_PATH = "$PWD\ml_model\inference_bundle.joblib"
-
 python run_ml_solver_db.py --offline full_test_data.json --haversine
 ```
 
-(Set that environment variable once per shell session — it isn't read from `.env`.)
+(`ROUTING_ML_MODEL_PATH` still works if you ever want to point at a different
+bundle — set it and it overrides the colocated one.)
 
 ## Running against a live Supabase DB
 
@@ -65,10 +62,12 @@ cp .env.example .env
 python run_ml_solver_db.py --date 2026-09-22
 ```
 
-If OSRM is reachable at `localhost:5000`/`:5001` it's used automatically for
-real road distances/durations; otherwise the solver logs a warning and falls
-back to haversine. Nothing is ever written back to the DB by this script —
-it's read-only unless you pass `--dump-dir`/`--sql-out`/`--sql-parts`.
+That's it — `.env` next to the script is read automatically (real
+`SUPABASE_URL`/`SUPABASE_KEY` environment variables still take priority if
+both are set). If OSRM is reachable at `localhost:5000`/`:5001` it's used
+automatically for real road distances/durations; otherwise the solver logs a
+warning and falls back to haversine. Nothing is ever written back to the DB
+by this script — it's read-only unless you pass `--dump-dir`/`--sql-out`/`--sql-parts`.
 
 ## Useful flags
 

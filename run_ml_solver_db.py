@@ -1011,9 +1011,15 @@ UTTARA_QUAD = [(90.3725, 23.8943), (90.4022, 23.8931),
 # self-contained since that project lives outside this backend package.
 
 _ML_BUNDLE_ENV_VAR = "ROUTING_ML_MODEL_PATH"
-_ML_BUNDLE_DEFAULT_PATH = (Path(__file__).resolve().parent.parent
-    / "Data-Driven-Employee-Routing-System" / "backend" / "app" 
+# Two known layouts: this standalone repo ships its own copy right next to the
+# script (ml_model/inference_bundle.joblib); the original monorepo checkout has
+# it under the sibling backend package instead. Try the colocated one first.
+_ML_BUNDLE_LOCAL_PATH = Path(__file__).resolve().parent / "ml_model" / "inference_bundle.joblib"
+_ML_BUNDLE_EXTERNAL_PATH = (Path(__file__).resolve().parent.parent
+    / "Data-Driven-Employee-Routing-System" / "backend" / "app"
     / "services" / "routing" / "ml_model" / "inference_bundle.joblib")
+_ML_BUNDLE_DEFAULT_PATH = (_ML_BUNDLE_LOCAL_PATH if _ML_BUNDLE_LOCAL_PATH.exists()
+                          else _ML_BUNDLE_EXTERNAL_PATH)
 
 _ml_bundle_cache: Optional[Dict[str, Any]] = None
 
@@ -3101,23 +3107,35 @@ def solve_night(
 # Driver: fetch one service date and solve it
 # ──────────────────────────────────────────────────────────────────────────────
 
+def _read_env_file(path: Path, url: Optional[str], key: Optional[str]) -> tuple[Optional[str], Optional[str]]:
+    if not path.exists():
+        return url, key
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            if k.strip() == "SUPABASE_URL" and not url:
+                url = v.strip()
+            elif k.strip() == "SUPABASE_KEY" and not key:
+                key = v.strip()
+    return url, key
+
+
 def _db_client() -> "Client":
     url = os.environ.get("SUPABASE_URL")
     key = os.environ.get("SUPABASE_KEY")
+    # Two known layouts: this standalone repo's own .env (colocated with the
+    # script), or the original monorepo's backend/.env one level up. Try the
+    # colocated one first.
     if not url or not key:
-        envp = (Path(__file__).resolve().parent.parent
-                / "Data-Driven-Employee-Routing-System" / "backend" / ".env")
-        if envp.exists():
-            for line in envp.read_text().splitlines():
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, v = line.split("=", 1)
-                    if k.strip() == "SUPABASE_URL":
-                        url = v.strip()
-                    elif k.strip() == "SUPABASE_KEY":
-                        key = v.strip()
+        url, key = _read_env_file(Path(__file__).resolve().parent / ".env", url, key)
     if not url or not key:
-        raise SystemExit("SUPABASE_URL / SUPABASE_KEY not found (env or backend/.env)")
+        url, key = _read_env_file(
+            Path(__file__).resolve().parent.parent
+            / "Data-Driven-Employee-Routing-System" / "backend" / ".env",
+            url, key)
+    if not url or not key:
+        raise SystemExit("SUPABASE_URL / SUPABASE_KEY not found (env, .env, or backend/.env)")
     return create_client(url, key)
 
 
