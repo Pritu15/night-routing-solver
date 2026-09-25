@@ -1014,10 +1014,10 @@ _ML_BUNDLE_ENV_VAR = "ROUTING_ML_MODEL_PATH"
 # Two known layouts: this standalone repo ships its own copy right next to the
 # script (ml_model/inference_bundle.joblib); the original monorepo checkout has
 # it under the sibling backend package instead. Try the colocated one first.
-_ML_BUNDLE_LOCAL_PATH = Path(__file__).resolve().parent / "ml_model" / "inference_bundle.joblib"
+_ML_BUNDLE_LOCAL_PATH = Path(__file__).resolve().parent / "ml_model" / "inference_bundle_Retrained_V1.joblib"
 _ML_BUNDLE_EXTERNAL_PATH = (Path(__file__).resolve().parent.parent
     / "Data-Driven-Employee-Routing-System" / "backend" / "app"
-    / "services" / "routing" / "ml_model" / "inference_bundle.joblib")
+    / "services" / "routing" / "ml_model" / "inference_bundle_Retrained_V1.joblib")
 _ML_BUNDLE_DEFAULT_PATH = (_ML_BUNDLE_LOCAL_PATH if _ML_BUNDLE_LOCAL_PATH.exists()
                           else _ML_BUNDLE_EXTERNAL_PATH)
 
@@ -1026,12 +1026,31 @@ _ml_bundle_cache: Optional[Dict[str, Any]] = None
 _ML_FIXED_HOLIDAYS_MD = {(2, 21), (3, 26), (4, 14), (5, 1), (8, 15), (12, 16), (12, 25)}
 
 
+def _normalise_ml_bundle(bundle: Dict[str, Any]) -> Dict[str, Any]:
+    """Map a retrained bundle's naming onto the original one `_ml_feature_row` reads.
+
+    The retrained bundles (e.g. inference_bundle_Retrained_V1.joblib) store the
+    historical-speed lookup tables as (speed, n_trips) and the global fallback
+    as `global_speed`; the original stores (mean, count) and `global_mean`.
+    Everything else -- index names, feature/categorical columns, models -- is
+    identical, so renaming here lets either bundle drive the same feature code.
+    """
+    renames = {"speed": "mean", "n_trips": "count"}
+    for key in ("lvl1", "lvl2", "lvl3"):
+        table = bundle[key]
+        if "mean" not in table.columns or "count" not in table.columns:
+            bundle[key] = table.rename(columns=renames)
+    if "global_mean" not in bundle and "global_speed" in bundle:
+        bundle["global_mean"] = bundle["global_speed"]
+    return bundle
+
+
 def _load_ml_bundle() -> Dict[str, Any]:
     """Loads `inference_bundle.joblib` once per process."""
     global _ml_bundle_cache
     if _ml_bundle_cache is None:
         path = os.environ.get(_ML_BUNDLE_ENV_VAR, str(_ML_BUNDLE_DEFAULT_PATH))
-        _ml_bundle_cache = joblib.load(path)
+        _ml_bundle_cache = _normalise_ml_bundle(joblib.load(path))
     return _ml_bundle_cache
 
 
